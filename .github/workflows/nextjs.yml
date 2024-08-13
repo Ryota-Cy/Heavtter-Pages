@@ -22,58 +22,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Move to project directory
-        run: cd heavtter-pages
-
-      - name: Detect package manager
-        id: detect-package-manager
-        run: |
-          cd heavtter-pages
-          if [ -f "yarn.lock" ]; then
-            echo "manager=yarn" >> $GITHUB_OUTPUT
-            echo "command=install" >> $GITHUB_OUTPUT
-            echo "runner=yarn" >> $GITHUB_OUTPUT
-            exit 0
-          elif [ -f "package.json" ]; then
-            echo "manager=npm" >> $GITHUB_OUTPUT
-            echo "command=ci" >> $GITHUB_OUTPUT
-            echo "runner=npx --no-install" >> $GITHUB_OUTPUT
-            exit 0
-          else
-            echo "Unable to determine package manager"
-            exit 1
-          fi
-      
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
-      
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        with:
-          static_site_generator: next
-      
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            heavtter-pages/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
-      
+          cache: yarn
+          # `heavtter-pages` ディレクトリ内にあるパッケージ管理ファイルを指定
+          cache-dependency-path: heavtter-pages/yarn.lock
+
       - name: Install dependencies
-        run: cd heavtter-pages && ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-      
+        run: |
+          cd heavtter-pages
+          yarn install
+
       - name: Build with Next.js
-        run: cd heavtter-pages && ${{ steps.detect-package-manager.outputs.runner }} next build && ${{ steps.detect-package-manager.outputs.runner }} next export
+        run: |
+          cd heavtter-pages
+          yarn build && yarn export
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: heavtter-pages/out  # ディレクトリを指定
+          path: heavtter-pages/out  # エクスポートされた静的ファイルのパスを指定
 
   deploy:
     environment:
