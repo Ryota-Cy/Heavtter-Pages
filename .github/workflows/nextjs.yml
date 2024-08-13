@@ -21,25 +21,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: yarn
-          # `heavtter-pages` ディレクトリ内にあるパッケージ管理ファイルを指定
-          cache-dependency-path: heavtter-pages/yarn.lock
+          # cache-dependency-path を削除
 
       - name: Install dependencies
         run: |
           cd heavtter-pages
-          yarn install
+          yarn install || npm install  # yarn.lockがなければnpmを使用
 
       - name: Build with Next.js
         run: |
           cd heavtter-pages
-          yarn build && yarn export
-      
+          yarn build && yarn export || npm run build && npm run export
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
