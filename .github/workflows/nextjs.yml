@@ -26,30 +26,28 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          # cache-dependency-path を削除
 
       - name: Install dependencies
         run: |
           cd heavtter-pages
-          yarn install || npm install  # yarn.lockがなければnpmを使用
+          yarn install || npm install
 
       - name: Build with Next.js
         run: |
           cd heavtter-pages
-          yarn build && yarn export || npm run build && npm run export
+          yarn build || npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: heavtter-pages/out  # エクスポートされた静的ファイルのパスを指定
+          path: heavtter-pages/out  # 自動生成されたoutフォルダを指定
 
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     needs: build
+    runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: heavtter-pages/out
