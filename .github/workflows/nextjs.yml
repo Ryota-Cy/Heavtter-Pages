@@ -41,6 +41,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: heavtter-pages/out  # 自動生成されたoutフォルダを指定
+          artifact_name: my-pages-artifact 
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,3 +51,4 @@ jobs:
         uses: actions/deploy-pages@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          artifact_name: my-pages-artifact 
