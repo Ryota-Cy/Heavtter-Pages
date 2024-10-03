@@ -38,7 +38,7 @@ jobs:
           yarn build || npm run build
 
       - name: List contents of out directory
-        run: ls -l heavtter-pages/out  # outディレクトリ内のファイルを確認
+        run: ls -l heavtter-pages/out
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -50,6 +50,12 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: List contents of out directory
+        run: ls
+        
+      - name: List contents of out directory
+        run: ls -l heavtter-pages/out
+        
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
