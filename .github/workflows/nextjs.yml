@@ -51,10 +51,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: List contents of out directory
-        run: ls
+        run: ls .
         
       - name: List contents of out directory
-        run: ls -l heavtter-pages/out
+        run: ls ./heavtter-pages/out
         
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
