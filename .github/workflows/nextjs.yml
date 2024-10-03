@@ -37,21 +37,8 @@ jobs:
           cd heavtter-pages
           yarn build || npm run build
 
-      - name: List contents of out directory
-        run: ls -l heavtter-pages/out
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: heavtter-pages/out
-          name: github-pages
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:        
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: heavtter-pages/out
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub のトークンを使用
+          publish_dir: ./heavtter-pages/out 
