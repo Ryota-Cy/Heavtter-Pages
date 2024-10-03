@@ -49,13 +49,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    steps:
-      - name: List contents of out directory
-        run: ls .
-        
-      - name: List contents of out directory
-        run: ls ./heavtter-pages/out
-        
+    steps:        
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
